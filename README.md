@@ -205,6 +205,25 @@ git clone https://github.com/dropbox/zxcvbn.git
 
 zxcvbn is built with CoffeeScript, browserify, and uglify-js. CoffeeScript source lives in `src`, which gets compiled, bundled and minified into `dist/zxcvbn.js`.
 
+## Modules needed
+
+``` shell
+npm install browserify
+npm install exorcist
+npm install coffeeify
+npm install uglifyify
+npm install coffeetape
+npm install tape
+```
+
+## Testing
+
+``` shell
+npm run test
+```
+
+## Building
+
 ``` shell
 npm run build    # builds dist/zxcvbn.js
 npm run watch    # same, but quickly rebuilds as changes are made in src.

@@ -9,3 +9,6 @@ lib
 *.swp
 *.swo
 tmux-*.log
+npm-debug.log
+.idea
+*/*.js.map
