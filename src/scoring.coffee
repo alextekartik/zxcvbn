@@ -140,13 +140,14 @@ scoring =
     match.entropy = entropy_functions[match.pattern].call this, match
 
   repeat_entropy: (match) ->
-    cardinality = @calc_bruteforce_cardinality match.token
-    @lg (cardinality * match.token.length)
+    num_repeats = match.token.length / match.base_token.length
+    match.base_entropy + @lg num_repeats
 
   sequence_entropy: (match) ->
     first_chr = match.token.charAt(0)
-    if first_chr in ['a', '1']
-      base_entropy = 1
+    # lower entropy for obvious starting points
+    if first_chr in ['a', 'A', 'z', 'Z', '0', '1', '9']
+      base_entropy = 2
     else
       if first_chr.match /\d/
         base_entropy = @lg(10) # digits
@@ -227,8 +228,9 @@ scoring =
   dictionary_entropy: (match) ->
     match.base_entropy = @lg match.rank # keep these as properties for display purposes
     match.uppercase_entropy = @extra_uppercase_entropy match
-    match.l33t_entropy = @extra_l33t_entropy match
-    match.base_entropy + match.uppercase_entropy + match.l33t_entropy
+    match.reversed_entropy = match.reversed and 1 or 0
+    match.l33t_entropy = @extra_l33t_entropy(match)
+    match.base_entropy + match.uppercase_entropy + match.l33t_entropy + match.reversed_entropy
 
   START_UPPER: /^[A-Z][^A-Z]+$/
   END_UPPER: /^[^A-Z]+[A-Z]$/

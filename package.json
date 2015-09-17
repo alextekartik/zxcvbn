@@ -1,7 +1,9 @@
 {
   "name": "zxcvbn",
-  "version": "3.4.0",
+  "version": "3.5.0",
   "description": "realistic password strength estimation",
+  "author": "Dan Wheeler",
+  "license": "MIT",
   "main": "lib/main.js",
   "repository": {
     "type": "git",
@@ -9,6 +11,7 @@
   },
   "scripts": {
     "test": "coffeetape test/*.coffee | faucet",
+    "test-saucelabs": "zuul -- test/*.coffee",
     "build": "npm run build-lib ; npm run build-dist",
     "watch": "npm run watch-lib & npm run watch-dist",
     "build-lib": "coffee -o lib --compile --bare --map src/*.coffee",
@@ -17,50 +20,33 @@
     "watch-dist": "watchify --debug -v --standalone zxcvbn -t coffeeify --extension='.coffee' -t uglifyify src/main.coffee -o 'exorcist dist/zxcvbn.js.map >| dist/zxcvbn.js'",
     "prepublish": "npm run build"
   },
-  "keywords": [
-    "password",
-    "passphrase",
-    "strength",
-    "quality",
-    "estimation",
-    "estimate",
-    "meter",
-    "pattern",
-    "matcher",
-    "security",
-    "authentication",
-    "cracking",
-    "scoring",
-    "entropy",
-    "bruteforce"
-  ],
-  "author": "Dan Wheeler",
-  "license": "MIT",
   "devDependencies": {
     "browserify": "^11.0.1",
     "coffee-coverage": "^0.6.3",
-    "coffee-script": "^1.9.3",
+    "coffee-script": "^1.10.0",
     "coffeeify": "^1.1.0",
     "coffeetape": "^1.0.1",
     "exorcist": "^0.4.0",
     "faucet": "^0.0.1",
     "istanbul": "^0.3.18",
     "tape": "^4.2.0",
-    "testling": "^1.7.1",
     "uglifyify": "^3.0.1",
-    "watchify": "^3.3.1"
+    "watchify": "^3.3.1",
+    "zuul": "^3.4.0"
   },
-  "testling": {
-    "files": "test/*.js",
-    "browsers": [
-      "ie/6..latest",
-      "chrome/22..latest",
-      "firefox/16..latest",
-      "safari/latest",
-      "opera/11.0..latest",
-      "iphone/6",
-      "ipad/6",
-      "android-browser/latest"
-    ]
-  }
+  "keywords": [
+    "password",
+    "passphrase",
+    "security",
+    "authentication",
+    "strength",
+    "meter",
+    "quality",
+    "estimation",
+    "pattern",
+    "cracking",
+    "scoring",
+    "entropy",
+    "bruteforce"
+  ]
 }

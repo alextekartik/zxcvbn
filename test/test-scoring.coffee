@@ -39,7 +39,11 @@ test 'lg', (t) ->
   p = 4
   approx_equal t, lg(n * p), lg(n) + lg(p), "product rule"
   approx_equal t, lg(n / p), lg(n) - lg(p), "quotient rule"
+<<<<<<< HEAD
   approx_equal t, lg(10), 1 / (Math.log(2) / Math.LN10), "base switch rule"
+=======
+  approx_equal t, lg(Math.E), 1 / Math.log(2), "base switch rule"
+>>>>>>> upstream/master
   approx_equal t, lg(Math.pow(n, p)), p * lg(n), "power rule"
   approx_equal t, lg(n), Math.log(n) / Math.log(2), "base change rule"
   t.end()
@@ -194,29 +198,43 @@ test 'calc_entropy', (t) ->
   t.end()
 
 test 'repeat entropy', (t) ->
-  for [token, entropy] in [
-    [ 'aa',   lg(26 * 2) ]
-    [ '999',  lg(10 * 3) ]
-    [ '$$$$', lg(33 * 4) ]
+  for [token, base_token] in [
+    [ 'aa',   'a' ]
+    [ '999',  '9' ]
+    [ '$$$$', '$' ]
+    [ 'abab', 'ab']
+    [ 'batterystaplebatterystaplebatterystaple', 'batterystaple']
     ]
-    match = token: token
-    msg = "the repeat pattern '#{token}' has entropy of #{entropy}"
-    t.equal scoring.repeat_entropy(match), entropy, msg
+    base_entropy = scoring.minimum_entropy_match_sequence(
+      base_token
+      matching.omnimatch(base_token)
+    ).entropy
+    match =
+      token: token
+      base_token: base_token
+      base_entropy: base_entropy
+    expected_entropy = base_entropy + lg(match.token.length / match.base_token.length)
+    msg = "the repeat pattern '#{token}' has entropy of #{expected_entropy}"
+    t.equal scoring.repeat_entropy(match), expected_entropy, msg
   t.end()
 
 test 'sequence entropy', (t) ->
   for [token, ascending, entropy] in [
-    [ 'ab',   true,  lg(26) + lg(2) ]
+    [ 'ab',   true,  2 + lg(2) ]
     [ 'XYZ',  true,  lg(26) + 1 + lg(3) ]
     [ '4567', true,  lg(10) + lg(4) ]
     [ '7654', false, lg(10) + lg(4) + 1 ]
-    [ 'ZYX',  false, lg(26) + 1 + lg(3) + 1 ]
+    [ 'ZYX',  false, 2 + lg(3) + 1 ]
     ]
     match =
       token: token
       ascending: ascending
     msg = "the sequence pattern '#{token}' has entropy of #{entropy}"
+<<<<<<< HEAD
     # t.equal scoring.sequence_entropy(match), entropy, msg
+=======
+    t.equal scoring.sequence_entropy(match), entropy, msg
+>>>>>>> upstream/master
   t.end()
 
 test 'regex entropy', (t) ->
@@ -331,6 +349,13 @@ test 'dictionary_entropy', (t) ->
     rank: 32
   msg = "extra entropy is added for capitalization"
   t.equal scoring.dictionary_entropy(match), lg(32) + scoring.extra_uppercase_entropy(match), msg
+
+  match =
+    token: 'aaa'
+    rank: 32
+    reversed: true
+  msg = "1 bit of extra entropy is added for reversed words"
+  t.equal scoring.dictionary_entropy(match), lg(32) + 1, msg
 
   match =
     token: 'aaa@@@'
