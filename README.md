@@ -219,6 +219,11 @@ npm install coffeetape
 npm install tape
 ```
 
+Single command
+
+``` shell
+npm install browserify, exorcist, coffeeify, uglifyify, coffeetape, tape
+```
 ## Testing
 
 ``` shell
